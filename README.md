@@ -44,7 +44,3 @@ OPENAI_API_KEY=sk-your-openai-key-here
 - Add support for combining multiple documents
 - Tighten input validation, file-type checks, and testing
 - Search functionality when search API is available
-
-```
-
-```
