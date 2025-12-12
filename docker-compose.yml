@@ -1,0 +1,24 @@
+version: "3.8"
+
+services:
+  web:
+    build:
+      context: ./web
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=production
+      - TRELENT_DATA_INGESTION_API_URL=${TRELENT_DATA_INGESTION_API_URL:-https://api.trelent.com}
+      - TRELENT_DATA_INGESTION_API_TOKEN=${TRELENT_DATA_INGESTION_API_TOKEN}
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
+      - USE_TRELENT=${USE_TRELENT:-true}
+    env_file:
+      - .env
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost:3000/ || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
