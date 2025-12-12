@@ -19,7 +19,7 @@ Create `web/.env.local`:
 TRELENT_DATA_INGESTION_API_URL=https://api.trelent.com
 TRELENT_DATA_INGESTION_API_TOKEN=your_trelent_token_here
 OPENAI_API_KEY=sk-your-openai-key-here
-
+```
 
 ## How it fits together
 
@@ -44,4 +44,7 @@ OPENAI_API_KEY=sk-your-openai-key-here
 - Add support for combining multiple documents
 - Tighten input validation, file-type checks, and testing
 - Search functionality when search API is available
+
+```
+
 ```
