@@ -1,0 +1,16 @@
+{
+  "lockfileVersion": 1,
+  "configVersion": 1,
+  "workspaces": {
+    "": {
+      "dependencies": {
+        "@trelent/data-ingestion": "^0.0.12",
+      },
+    },
+  },
+  "packages": {
+    "@trelent/data-ingestion": ["@trelent/data-ingestion@0.0.12", "", { "peerDependencies": { "typescript": "^5.9.2" } }, "sha512-c4Scm5x+CqvNqGSMCvb5eoylImwEVXaZ5d0M/D8HdCiFKgnYvIV/96iOlKBF+1qPgm9PGMxJjS+w0TAlrYNI1g=="],
+
+    "typescript": ["typescript@5.9.3", "", { "bin": { "tsc": "bin/tsc", "tsserver": "bin/tsserver" } }, "sha512-jl1vZzPDinLr9eUt3J/t7V6FgNEw9QjvBPdysz9KfQDD41fQrC2Y4vKQdiaUpFT4bXlb1RHhLpp8wtm6M5TgSw=="],
+  }
+}

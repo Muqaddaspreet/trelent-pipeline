@@ -18,7 +18,10 @@ export async function POST(req: Request) {
     }
 
     const fileBlob = file as Blob;
-    const fileName = (file as any).name || "uploaded-document.pdf";
+
+    type NamedBlob = Blob & { name?: string };
+    const namedFile = file as NamedBlob;
+    const fileName = namedFile.name ?? "uploaded-document.pdf";
 
     // Uploading file to Trelent
     const upload = await client.uploadFile(fileBlob, fileName, {
@@ -45,11 +48,16 @@ export async function POST(req: Request) {
       fileId: upload.id,
       fileName,
     });
-  } catch (err: any) {
+  } catch (err: unknown) {
     console.error("Error in POST /api/runs:", err);
-    return NextResponse.json(
-      { ok: false, error: String(err) },
-      { status: 500 }
-    );
+
+    const message =
+      err instanceof Error
+        ? err.message
+        : typeof err === "string"
+        ? err
+        : String(err);
+
+    return NextResponse.json({ ok: false, error: message }, { status: 500 });
   }
 }

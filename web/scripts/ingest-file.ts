@@ -27,16 +27,16 @@ async function main() {
     },
   };
 
-  console.log("🚀 Submitting ingestion job…");
+  console.log("Submitting ingestion job…");
 
   const response = await client.submitJob(job);
   console.log("Job submitted. ID:", response.job_id);
 
-  // Poll for status
+  // Polling for status
   const pollIntervalMs = 3000;
 
   while (true) {
-    console.log("⏳ Checking job status…");
+    console.log("Checking job status…");
     const status = await client.getJobStatus(response.job_id, {
       includeMarkdown: false,
       includeFileMetadata: true,
@@ -53,7 +53,14 @@ async function main() {
       }
 
       if (jobStatus === "failed") {
-        console.error("Job failed:", (status as any).error ?? "Unknown error");
+        const statusWithError = status as {
+          error?: unknown;
+          errors?: unknown;
+        };
+        const errorDetail =
+          statusWithError.error ?? statusWithError.errors ?? "Unknown error";
+
+        console.error("Job failed:", errorDetail);
         process.exit(1);
       }
 
@@ -65,21 +72,27 @@ async function main() {
   }
 }
 
-// IMPORTANT: richer error logging here
-main().catch(async (err: any) => {
+main().catch(async (err: unknown) => {
   console.error("Unexpected error while submitting job or polling:");
   console.error(err);
 
   try {
-    if (err?.cause) {
-      console.error("Cause:", err.cause);
-    }
+    if (typeof err === "object" && err !== null) {
+      const e = err as {
+        cause?: unknown;
+        response?: { status?: number; text?: () => Promise<string> };
+      };
 
-    const resp = err?.response;
-    if (resp && typeof resp.text === "function") {
-      console.error("HTTP status:", resp.status);
-      const body = await resp.text();
-      console.error("Response body:", body);
+      if (e.cause !== undefined) {
+        console.error("Cause:", e.cause);
+      }
+
+      const resp = e.response;
+      if (resp && typeof resp.text === "function") {
+        console.error("HTTP status:", resp.status);
+        const body = await resp.text();
+        console.error("Response body:", body);
+      }
     }
   } catch (nested) {
     console.error("Failed to inspect error.response:", nested);
